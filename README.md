@@ -1,2 +1,23 @@
+<<<<<<< HEAD
 # homebrew-mdigi
 A tap using brew for the administration of macOS applications distributed as binaries
+=======
+# MatznerDigital Mdigi
+
+## How do I install these formulae?
+
+`brew install matznerdigital/mdigi/<formula>`
+
+Or `brew tap matznerdigital/mdigi` and then `brew install <formula>`.
+
+Or, in a `brew bundle` `Brewfile`:
+
+```ruby
+tap "matznerdigital/mdigi"
+brew "<formula>"
+```
+
+## Documentation
+
+`brew help`, `man brew` or check [Homebrew's documentation](https://docs.brew.sh).
+>>>>>>> a646782 (Create matznerdigital/mdigi tap)
