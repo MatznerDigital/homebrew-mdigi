@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # homebrew-mdigi
 A tap using brew for the administration of macOS applications distributed as binaries
 =======
@@ -22,4 +21,3 @@ brew "matznerdigital/mdigi/<formula>"
 ## Documentation
 
 `brew help`, `man brew` or check [Homebrew's documentation](https://docs.brew.sh).
->>>>>>> a646782 (Create matznerdigital/mdigi tap)
