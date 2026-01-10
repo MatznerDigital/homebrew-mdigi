@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+#chromium
+brew reinstall --force matznerdigital/mdigi/chromium
+xattr -d com.apple.quarantine ~/Applications/Chromium.app
+
+#angry-ip-scanner
+brew reinstall --force matznerdigital/mdigi/angry-ip-scanner
+xattr -d com.apple.quarantine ~/Applications/Angry\ IP\ Scanner.app
