@@ -21,6 +21,7 @@ cask "chromium" do
   preflight do
     File.write shimscript, <<~EOS
       #!/bin/sh
+      exec 'xattr -d com.apple.quarantine #{appdir}/Chromium.app'
       exec '#{appdir}/Chromium.app/Contents/MacOS/Chromium' "$@"
     EOS
   end
