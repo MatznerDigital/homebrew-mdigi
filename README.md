@@ -9,13 +9,13 @@ A tap 4 brew
 
 `brew install matznerdigital/mdigi/<formula/cask>`
 
-Or `brew tap matznerdigital/mdigi` and then `brew install <formula/cask>`.
+Or `brew tap matznerdigital/homebrew-mdigi` and then `brew install <formula/cask>`.
 
 Or, in a `brew bundle` `Brewfile`:
 
 ```ruby
-tap "matznerdigital/mdigi"
-brew "matznerdigital/mdigi/<formula>"
+tap "matznerdigital/homebrew-mdigi"
+brew "matznerdigital/homebrew-mdigi/<formula>"
 ```
 
 ## Documentation
