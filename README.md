@@ -13,9 +13,11 @@ Or `brew tap matznerdigital/homebrew-mdigi` and then `brew install <formula/cask
 
 Or, in a `brew bundle` `Brewfile`:
 
-```ruby
+```bash
 tap "matznerdigital/homebrew-mdigi"
-brew "matznerdigital/homebrew-mdigi/<formula>"
+brew trust "matznerdigital/homebrew-mdigi"   # Homebrew 6.x requires trusting non-official taps
+brew install "matznerdigital/homebrew-mdigi/<formula>"
+brew install --cask <cask>
 ```
 
 ## Documentation
