@@ -16,7 +16,7 @@ Or, in a `brew bundle` `Brewfile`:
 ```bash
 tap "matznerdigital/homebrew-mdigi"
 brew trust "matznerdigital/homebrew-mdigi"   # Homebrew 6.x requires trusting non-official taps
-brew install "matznerdigital/homebrew-mdigi/<formula>"
+brew install "matznerdigital/homebrew-mdigi/<cask>"
 brew install --cask <cask>
 ```
 
