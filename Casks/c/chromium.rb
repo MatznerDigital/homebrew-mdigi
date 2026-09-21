@@ -18,7 +18,7 @@ cask "chromium" do
   shimscript = "#{staged_path}/chromium.wrapper.sh"
   binary shimscript, target: "chromium"
 
-  preflight do
+  preflight_steps do
     File.write shimscript, <<~EOS
       #!/bin/sh
       exec 'xattr -d com.apple.quarantine #{appdir}/Chromium.app'
