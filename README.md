@@ -14,8 +14,9 @@ Or `brew tap matznerdigital/homebrew-mdigi` and then `brew install <formula/cask
 Or, in a `brew bundle` `Brewfile`:
 
 ```bash
-tap "matznerdigital/homebrew-mdigi"
+brew tap "matznerdigital/homebrew-mdigi"
 brew trust "matznerdigital/homebrew-mdigi"   # Homebrew 6.x requires trusting non-official taps
+brew update
 brew install "matznerdigital/homebrew-mdigi/<cask>"
 brew install --cask <cask>
 ```
