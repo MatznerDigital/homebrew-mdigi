@@ -1,3 +1,4 @@
+cat << 'EOF' > /opt/homebrew/Library/Taps/matznerdigital/homebrew-mdigi/Casks/p/presenton.rb
 cask "presenton" do
   version "0.9.11-beta"
 
@@ -34,4 +35,5 @@ cask "presenton" do
     "~/Library/Saved Application State/ai.presenton.app.savedState",
   ]
 end
+EOF
 
