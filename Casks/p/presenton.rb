@@ -1,16 +1,20 @@
 cask "presenton" do
-  arch arm: "arm64", intel: "x64"
-
   version "0.9.11-beta"
-  sha256 :no_check
 
-  url "https://github.com{version}/Presenton-#{version}-#{arch}.dmg",
-      verified: "://github.com"
+  on_arm do
+    sha256 :no_check
+    url "https://github.com{version}/Presenton-#{version}-arm64.dmg"
+  end
+
+  on_intel do
+    sha256 :no_check
+    url "https://github.com{version}/Presenton-#{version}-x64.dmg"
+  end
+
   name "Presenton"
   desc "Open-source AI presentation generator"
   homepage "https://presenton.ai"
 
-  # Prüft automatisch auf neuere GitHub-Releases
   livecheck do
     url :url
     strategy :github_latest
@@ -18,7 +22,6 @@ cask "presenton" do
 
   app "Presenton.app"
 
-  # Entfernt das macOS Quarantäne-Flag (Gatekeeper-Bypass), damit die App direkt startet
   postflight do
     system_command "/usr/bin/xattr",
                    args: ["-cr", "#{appdir}/Presenton.app"],
