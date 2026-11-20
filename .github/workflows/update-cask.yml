@@ -1,0 +1,88 @@
+name: Update Presenton Cask
+
+on:
+  schedule:
+    # Läuft jeden Tag um 06:00 Uhr UTC
+    - cron: '0 6 * * *'
+  # Ermöglicht manuelles Starten über den "Actions"-Tab auf GitHub
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Auf neue Version prüfen & Cask aktualisieren
+        run: |
+          # Aktuelle Version aus der Cask-Datei auslesen
+          CURRENT_VERSION=$(grep -E '^\s*version "' Casks/p/presenton.rb | sed -E 's/.*"([^"]+)".*/\1/')
+          echo "Aktuelle Cask-Version: $CURRENT_VERSION"
+
+          # Neuestes Release von Presenton über GitHub API abrufen
+          RELEASE_JSON=$(curl -s https://github.com)
+          LATEST_TAG=$(echo "$RELEASE_JSON" | jq -r '.tag_name')
+
+          # Entfernt das Präfix "electron-v" oder "v", falls vorhanden
+          LATEST_VERSION=$(echo "$LATEST_TAG" | sed -E 's/^(electron-)?v//')
+          echo "Neueste GitHub-Version: $LATEST_VERSION"
+
+          if [ -z "$LATEST_VERSION" ] || [ "$LATEST_VERSION" == "null" ]; then
+            echo "Konnte neueste Version nicht ermitteln."
+            exit 1
+          fi
+
+          if [ "$CURRENT_VERSION" == "$LATEST_VERSION" ]; then
+            echo "Cask ist bereits auf dem neuesten Stand."
+            exit 0
+          fi
+
+          echo "Neue Version gefunden! Lade Dateien für SHA256-Berechnung herunter..."
+          ARM_URL="https://github.com{LATEST_TAG}/Presenton-${LATEST_VERSION}-arm64.dmg"
+          INTEL_URL="https://github.com{LATEST_TAG}/Presenton-${LATEST_VERSION}-x64.dmg"
+
+          curl -sL "$ARM_URL" -o arm.dmg
+          curl -sL "$INTEL_URL" -o intel.dmg
+
+          # Prüfen, ob Downloads gültige Dateien sind (größer als 1 MB)
+          if [ $(stat -c%s "arm.dmg") -lt 1000000 ] || [ $(stat -c%s "intel.dmg") -lt 1000000 ]; then
+            echo "Fehler beim Herunterladen der DMG-Dateien. URL-Struktur prüfen!"
+            exit 1
+          fi
+
+          ARM_SHA=$(sha256sum arm.dmg | awk '{print $1}')
+          INTEL_SHA=$(sha256sum intel.dmg | awk '{print $1}')
+
+          echo "Neuer ARM64 SHA256: $ARM_SHA"
+          echo "Neuer Intel SHA256: $INTEL_SHA"
+
+          # Cask-Datei aktualisieren
+          sed -i "s/version \"${CURRENT_VERSION}\"/version \"${LATEST_VERSION}\"/" Casks/p/presenton.rb
+          
+          # Ersetzt die alten SHA256-Werte (erster Treffer = on_arm, zweiter Treffer = on_intel)
+          awk -v arm="$ARM_SHA" -v intel="$INTEL_SHA" '
+            /sha256 "/ {
+              count++
+              if (count == 1) sub(/sha256 "[^"]+"/, "sha256 \"" arm "\"")
+              if (count == 2) sub(/sha256 "[^"]+"/, "sha256 \"" intel "\"")
+            }
+            { print }
+          ' Casks/p/presenton.rb > Casks/p/presenton.rb.tmp && mv Casks/p/presenton.rb.tmp Casks/p/presenton.rb
+
+          rm -f arm.dmg intel.dmg
+
+      - name: Änderungen committen und pushen
+        run: |
+          git config --local user.email "github-actions[bot]@://github.com"
+          git config --local user.name "github-actions[bot]"
+          git add Casks/presenton.rb
+          if ! git diff --staged --quiet; then
+            LATEST_VERSION=$(grep -E '^\s*version "' Casks/p/presenton.rb | sed -E 's/.*"([^"]+)".*/\1/')
+            git commit -m "Update presenton to ${LATEST_VERSION}"
+            git push
+          fi
+
