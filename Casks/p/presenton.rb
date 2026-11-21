@@ -15,7 +15,7 @@ cask "presenton" do
      
   app "Presenton.app"
   
-  postflight do
+  postflight_steps do
     system_command "/usr/bin/xattr",
                    args: ["-cr", "#{appdir}/Presenton.app"],
                    sudo: false
