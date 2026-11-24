@@ -3,7 +3,7 @@ name: Update Presenton Cask
 on:
   schedule:
     # Läuft jeden Tag um 06:00 Uhr UTC
-    - cron: '0 6 * * *'
+    # - cron: '0 6 * * *'
   # Ermöglicht manuelles Starten über den "Actions"-Tab auf GitHub
   workflow_dispatch:
 
